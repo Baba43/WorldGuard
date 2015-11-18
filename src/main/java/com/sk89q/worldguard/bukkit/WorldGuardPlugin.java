@@ -47,6 +47,7 @@ import com.sk89q.worldguard.protection.regions.ProtectedCuboidRegion;
 import com.sk89q.worldguard.protection.regions.ProtectedRegion;
 import com.sk89q.worldguard.protection.util.UnresolvedNamesException;
 import com.sk89q.worldguard.session.SessionManager;
+import com.sk89q.worldguard.terraconia.TerraconiaProfileService;
 import com.sk89q.worldguard.util.concurrent.EvenMoreExecutors;
 import com.sk89q.worldguard.util.logging.ClassSourceValidator;
 import com.sk89q.worldguard.util.logging.RecordMessagePrefixer;
@@ -165,11 +166,12 @@ public class WorldGuardPlugin extends JavaPlugin {
             profileCache = new HashMapCache();
         }
 
-        profileService = new CacheForwardingService(
+        CacheForwardingService oldService = new CacheForwardingService(
                 new CombinedProfileService(
                         BukkitPlayerService.getInstance(),
                         HttpRepositoryService.forMinecraft()),
                 profileCache);
+        profileService = new TerraconiaProfileService(oldService);
 
         PermissionsResolverManager.initialize(this);
         configuration.load();

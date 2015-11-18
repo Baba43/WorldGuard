@@ -20,6 +20,7 @@
 package com.sk89q.worldguard.protection.managers.migration;
 
 import com.google.common.base.Predicate;
+import com.google.common.collect.ImmutableList;
 import com.sk89q.squirrelid.Profile;
 import com.sk89q.squirrelid.resolver.ProfileService;
 import com.sk89q.worldguard.domains.DefaultDomain;
@@ -110,13 +111,17 @@ public class UUIDMigration extends AbstractMigration {
                 lookupNames.removeAll(resolvedNames.keySet());
 
                 // Ask Mojang for names
-                profileService.findAllByName(lookupNames, new Predicate<Profile>() {
-                    @Override
-                    public boolean apply(Profile profile) {
-                        resolvedNames.put(profile.getName().toLowerCase(), profile.getUniqueId());
-                        return true;
-                    }
-                });
+                final ImmutableList<Profile> allByName = profileService.findAllByName(lookupNames);
+                for (Profile profile : allByName) {
+                    resolvedNames.put(profile.getName().toLowerCase(), profile.getUniqueId());
+                }
+//                profileService.findAllByName(lookupNames, new Predicate<Profile>() {
+//                    @Override
+//                    public boolean apply(Profile profile) {
+//                        resolvedNames.put(profile.getName().toLowerCase(), profile.getUniqueId());
+//                        return true;
+//                    }
+//                });
             } catch (IOException e) {
                 throw new MigrationException("The name -> UUID service failed", e);
             } catch (InterruptedException e) {
