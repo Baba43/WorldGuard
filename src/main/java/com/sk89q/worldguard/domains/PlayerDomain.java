@@ -20,6 +20,7 @@
 package com.sk89q.worldguard.domains;
 
 import com.sk89q.worldguard.LocalPlayer;
+import com.sk89q.worldguard.terraconia.DeprecatedCallLogger;
 import com.sk89q.worldguard.util.ChangeTracked;
 import de.bab43.playerapi.model.PlayerInfo;
 import de.bab43.playerapi.plugin.PlayerAPIPlugin;
@@ -90,6 +91,7 @@ public class PlayerDomain implements Domain, ChangeTracked {
                 if (player != null) {
                     uniqueIds.add(player.getUuid());
                 }
+                DeprecatedCallLogger.logInvalidPlayerDomainLookup("addPlayer(String)");
             }
         }
     }
@@ -136,6 +138,7 @@ public class PlayerDomain implements Domain, ChangeTracked {
             if (player != null) {
                 uniqueIds.remove(player.getUuid());
             }
+            DeprecatedCallLogger.logInvalidPlayerDomainLookup("removePlayer(String)");
         }
     }
 
@@ -181,6 +184,9 @@ public class PlayerDomain implements Domain, ChangeTracked {
      * @return the set of player names
      */
     public Set<String> getPlayers() {
+        if(Bukkit.getServer() != null) { // ByPassing Unit Tests
+            DeprecatedCallLogger.logInvalidPlayerDomainLookup("getPlayers()");
+        }
         return Collections.unmodifiableSet(names);
     }
 
@@ -202,6 +208,9 @@ public class PlayerDomain implements Domain, ChangeTracked {
     @Override
     public boolean contains(String playerName) {
         checkNotNull(playerName);
+        if(Bukkit.getServer() != null) { // ByPassing Unit Tests
+            DeprecatedCallLogger.logInvalidPlayerDomainLookup("contains(String)");
+        }
         return names.contains(playerName.trim().toLowerCase());
     }
 

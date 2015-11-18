@@ -47,6 +47,7 @@ import com.sk89q.worldguard.protection.regions.ProtectedCuboidRegion;
 import com.sk89q.worldguard.protection.regions.ProtectedRegion;
 import com.sk89q.worldguard.protection.util.UnresolvedNamesException;
 import com.sk89q.worldguard.session.SessionManager;
+import com.sk89q.worldguard.terraconia.DeprecatedCallLogger;
 import com.sk89q.worldguard.terraconia.TerraconiaProfileService;
 import com.sk89q.worldguard.util.concurrent.EvenMoreExecutors;
 import com.sk89q.worldguard.util.logging.ClassSourceValidator;
@@ -98,6 +99,7 @@ public class WorldGuardPlugin extends JavaPlugin {
     private ProfileService profileService;
     private ProfileCache profileCache;
     private PlayerMoveListener playerMoveListener;
+    private DeprecatedCallLogger deprecatedCallLogger;
 
     /**
      * Construct objects. Actual loading occurs when the plugin is enabled, so
@@ -127,6 +129,7 @@ public class WorldGuardPlugin extends JavaPlugin {
     @Override
     @SuppressWarnings("deprecation")
     public void onEnable() {
+        deprecatedCallLogger = new DeprecatedCallLogger();
         configureLogger();
 
         getDataFolder().mkdirs(); // Need to create the plugins/WorldGuard folder
