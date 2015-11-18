@@ -21,6 +21,9 @@ package com.sk89q.worldguard.domains;
 
 import com.sk89q.worldguard.LocalPlayer;
 import com.sk89q.worldguard.util.ChangeTracked;
+import de.bab43.playerapi.model.PlayerInfo;
+import de.bab43.playerapi.plugin.PlayerAPIPlugin;
+import org.bukkit.Bukkit;
 
 import java.util.Collections;
 import java.util.Set;
@@ -82,6 +85,12 @@ public class PlayerDomain implements Domain, ChangeTracked {
             // Trim because some names contain spaces (previously valid Minecraft
             // names) and we cannot store these correctly in the SQL storage
             // implementations
+            if (Bukkit.getServer() != null) { // ByPassing Unit Tests
+                final PlayerInfo player = PlayerAPIPlugin.getApi().getPlayerByName(name.trim());
+                if (player != null) {
+                    uniqueIds.add(player.getUuid());
+                }
+            }
         }
     }
 
@@ -94,6 +103,12 @@ public class PlayerDomain implements Domain, ChangeTracked {
         checkNotNull(uniqueId);
         setDirty(true);
         uniqueIds.add(uniqueId);
+        if (Bukkit.getServer() != null) { // ByPassing Unit Tests
+            final PlayerInfo player = PlayerAPIPlugin.getApi().getPlayerByUuid(uniqueId);
+            if (player != null) {
+                names.add(player.getName().toLowerCase());
+            }
+        }
     }
 
     /**
@@ -116,6 +131,12 @@ public class PlayerDomain implements Domain, ChangeTracked {
         checkNotNull(name);
         setDirty(true);
         names.remove(name.trim().toLowerCase());
+        if (Bukkit.getServer() != null) { // ByPassing Unit Tests
+            final PlayerInfo player = PlayerAPIPlugin.getApi().getPlayerByName(name);
+            if (player != null) {
+                uniqueIds.remove(player.getUuid());
+            }
+        }
     }
 
     /**
@@ -127,6 +148,12 @@ public class PlayerDomain implements Domain, ChangeTracked {
         checkNotNull(uuid);
         setDirty(true);
         uniqueIds.remove(uuid);
+        if (Bukkit.getServer() != null) { // ByPassing Unit Tests
+            final PlayerInfo player = PlayerAPIPlugin.getApi().getPlayerByUuid(uuid);
+            if (player != null) {
+                names.remove(player.getName());
+            }
+        }
     }
 
     /**
@@ -180,7 +207,7 @@ public class PlayerDomain implements Domain, ChangeTracked {
 
     @Override
     public int size() {
-        return names.size() + uniqueIds.size();
+        return Math.max(names.size(), uniqueIds.size());
     }
 
     @Override
