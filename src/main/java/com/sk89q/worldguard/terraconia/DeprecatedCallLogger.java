@@ -39,18 +39,18 @@ public class DeprecatedCallLogger {
     }
 
     public void logInvalidCall(String method) {
-        StringBuilder sb = new StringBuilder();
-        final StackTraceElement[] st = Thread.currentThread().getStackTrace();
-        for (int i = 3; i < st.length; i++) {
-            final StackTraceElement element = st[i];
-            sb.append(element.toString());
-            sb.append("\n");
-        }
-        final String call = sb.toString();
-        if (invalidCalls.add(call)) {
-            log.d("InvalidCall", new FieldLog("Invalid call to `" + method + "`")
-                    .add("Stacktrace", call).getMailText());
-        }
+//        StringBuilder sb = new StringBuilder();
+//        final StackTraceElement[] st = Thread.currentThread().getStackTrace();
+//        for (int i = 3; i < st.length; i++) {
+//            final StackTraceElement element = st[i];
+//            sb.append(element.toString());
+//            sb.append("\n");
+//        }
+//        final String call = sb.toString();
+//        if (invalidCalls.add(call)) {
+//            log.d("InvalidCall", new FieldLog("Invalid call to `" + method + "`")
+//                    .add("Stacktrace", call).getMailText());
+//        }
     }
 
     public static void logInvalidPlayerDomainLookup(String method) {
