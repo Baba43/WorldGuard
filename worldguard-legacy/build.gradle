@@ -5,9 +5,28 @@ version '6.1.2-SNAPSHOT'
 
 checkstyle.configFile = new File(projectDir, "config/checkstyle/checkstyle.xml")
 
+    repositories {
+        maven {
+            url 'http://terraconia.de:8081/artifactory/terraconia-repos'
+            name = "maven-main-cache"
+            credentials {
+                username = tcUser
+                password = tcPassword
+            }
+        }
+    }
+
+//    dependencies {
+//        classpath "org.jfrog.buildinfo:build-info-extractor-gradle:4.1.1"
+//        classpath group: 'org.zeroturnaround', name: 'gradle-jrebel-plugin', version: '1.1.2'
+//        classpath 'org.hidetake:gradle-ssh-plugin:2.7.0'
+//    }
+
 dependencies {
     compile 'org.khelekore:prtree:1.5.0'
     compile 'org.bukkit:bukkit:1.8.8-R0.1-SNAPSHOT'
+    compile group: 'de.terraconia', name: 'PlayerAPI-Bukkit', version: 'SERVER-SNAPSHOT', changing: true, transitive: false
+    compile group: 'de.terraconia', name: 'Baba43Lib-Bukkit', version: 'SERVER-SNAPSHOT', changing: true, transitive: false
     compile 'com.sk89q.worldedit:worldedit-bukkit:6.1.1-SNAPSHOT'
     compile 'com.sk89q:squirrelid:0.1.0'
     compile 'com.sk89q:guavabackport:1.1'
@@ -29,7 +48,7 @@ shadowJar {
         include(dependency('com.googlecode.json-simple:json-simple:1.1.1'))
         include(dependency('net.sf.opencsv:opencsv:2.0'))
     }
-                                                                   
+
     relocate('com.sk89q.guavabackport', 'com.sk89q.worldguard.internal.guava')
     relocate('org.flywaydb', 'com.sk89q.worldguard.internal.flywaydb')
     relocate('com.sk89q.squirrelid', 'com.sk89q.worldguard.util.profile')
